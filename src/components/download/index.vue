@@ -2,9 +2,9 @@
     <div class="download-box">
         <div class="download">
             <button class="downloadBtn" @click="downloadONO">下载ONO DAPP</button>
-            <div class="p-box">
-                <p class="download-text1">已为你解锁1000个邀请名额</p>
-                <p class="download-text2">完成邀请，最多可得<span class="num">100000</span>个ONOT</p>
+            <div class="p-box" v-if="status !== 515">
+                <p class="download-text1">已为你解锁100个邀请名额</p>
+                <p class="download-text2">完成邀请，最多可得<span class="num">10000</span>个ONOT</p>
             </div>
         </div>
     </div>
@@ -12,6 +12,12 @@
 
 <script>
 export default {
+    props: {
+        status: {
+            type: Number,
+            default: null
+        }
+    },
     data () {
         return {
             

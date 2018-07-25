@@ -31,6 +31,7 @@ export default {
         text-align: center;
         padding: 0 0.3rem;
         color: #ffffff;
+        line-height: 0.42rem;
     }
 }
 .normal {

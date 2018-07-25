@@ -6,7 +6,7 @@ import fetch from '../utils/fetch';
 @invite         邀请码 'xxxx'
 @channl         途径 ‘1’
 */
-export function register ({ fun = 'user_register_china', code='1234', account = '8613458401504', invite = '1234', channl = '1' }) {
+export function register ({ fun = 'user_register_china', code, account = '8613458401504', invite = 'ONOC', channl = '1' }) {
     const data = {
         fun,
         account,

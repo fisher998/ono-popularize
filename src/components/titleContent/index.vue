@@ -1,12 +1,12 @@
 <template>
     <div class="titleContent-box">
         <div class="titleContent">
-            <p class="content1">
+            <!-- <p class="content1">
                 币友福利，最高领 10万 ONOT
             </p>
             <p class="content2">
                 注册领100 ONOT,邀请最高再领10万
-            </p>
+            </p> -->
             <Title size="normal">注册属于你的 ONO ID</Title>
         </div>
     </div>

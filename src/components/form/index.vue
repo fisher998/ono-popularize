@@ -8,22 +8,20 @@
                 <el-form-item prop="vfCode" :error="registerErrors.vfCode">
                     <el-input class="vfCode" type="number" v-model="ruleForm.vfCode" placeholder="输入验证码"></el-input>
                 </el-form-item>
-                <button class="vfBtn" :disabled="time !== 0" @click.prevent="sendCode">{{ time === 0 ? '发送验证码' : `重发验证码(${ time < 10 ? '0' + time : time })` }}</button>
+                <div class="btnBox">
+                    <button class="vfBtn" :disabled="time !== 0" @click.prevent="sendCode">{{ time === 0 ? '发送验证码' : `重发验证码(${ time < 10 ? '0' + time : time })` }}</button>
+                </div>
             </div>
             <el-form-item prop="ivCode" :error="registerErrors.ivCode">
-                <el-input type="text" v-model="ruleForm.ivCode" placeholder="输入邀请码 ONOC"></el-input>
+                <el-input type="text" v-model="ruleForm.ivCode" placeholder="输入邀请码(选填)"></el-input>
             </el-form-item>
             <div class="protocol-box">
                 <el-form-item prop="protocol">
                     <el-checkbox v-model="ruleForm.protocol">
                     </el-checkbox>
-                    
                 </el-form-item>
                 <div class="text">
-                    注册即表示您已阅读并同意
-                    <a href="https://www.ono.chat/ono/programme/index.html">《ONO社交网络共同纲领》</a>
-                    与
-                    <a href="https://www.ono.chat/ono/protocol/index.html">《ONO用户协议》</a>
+                    注册即表示您已阅读并同意<a href="https://www.ono.chat/ono/programme/index.html">《ONO社交网络共同纲领》</a>与<a href="https://www.ono.chat/ono/protocol/index.html">《ONO用户协议》</a>
                 </div>
             </div>
         </el-form>
@@ -49,13 +47,15 @@ export default {
         var validateVfCode = (rule, value, callback) => {
             if (!value) {
                 callback(new Error('验证码不能为空'));
+            } else if (value.length !== 4) {
+                callback(new Error('请输入4位验证码'));
             } else {
                 callback();
             }
         }
         var validateivCode = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请输入邀请码'));
+            if (value && value.length !== 4) {
+                callback(new Error('请输入4位邀请码'));
             } else {
                 callback();
             }
@@ -108,7 +108,7 @@ export default {
             if (this.time > 0) {
                 setTimeout(() => {
                     this.timer();
-                }, 100);
+                }, 1000);
             }
         },
         sendCode () {
@@ -118,11 +118,6 @@ export default {
                     sendVerifyCode({ 'account': '86' + this.ruleForm.mobile }).then(res => {
                         console.log(res);
                         console.log(res.data.status.code)
-                        // if (res.data.status.code === 200) {
-                        //     this.startBegin();
-                        // } else {
-                        //     res.data.status.code['515']
-                        // }
                         switch (res.data.status.code) {
                             case 200:
                                 this.startBegin();
@@ -161,7 +156,7 @@ export default {
                                 break;
                             case 515:
                                 this.registerErrors.mobile = '账号已经存在';
-                                this.$emit('alreadyRegister');
+                                this.$emit('alreadyRegister', 515);
                                 break;
                             case 519:
                                 this.registerErrors.ivCode = '邀请码使用次数不足';
@@ -206,27 +201,40 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        position: relative;
-        .vfCode {
-            width: 4.18rem;
+        .el-form-item {
+            width: 4.30rem!important;
+            .vfCode {
+                // width: 4.16rem;
+                width: 100%;
+            }
         }
-        .vfBtn {
-            width: 2.16rem;
-            height: 0.88rem;
-            border: none;
-            outline: none;
-            border-radius: 0.08rem;
-            border: none;
-            padding: 0;
-            margin-bottom: 0.06rem;
-            background-image: linear-gradient(90deg, #ee4f91 0%, #5666e9 100%), linear-gradient(#0091cd, #0091cd);
-            color: #ffffff;
-            font-size: 0.24rem;
+        .btnBox {
+            width: 2.12rem;
+            height: 1.44rem;
+            position: relative;
+            .vfBtn {
+                position: absolute;
+                bottom: 0rem;
+                left: -0.13rem;
+                z-index: 5;
+                width: 2.18rem;
+                height: 0.88rem;
+                border: none;
+                outline: none;
+                border-radius: 0.08rem;
+                border: none;
+                padding: 0;
+                margin-bottom: 0.06rem;
+                background-image: linear-gradient(90deg, #ee4f91 0%, #5666e9 100%), linear-gradient(#0091cd, #0091cd);
+                color: #ffffff;
+                font-size: 0.24rem;
+            }
         }
     }
     .protocol-box {
         width: 100%;
         font-size: 0.24rem;
+        height: 0.33rem;
         position: relative;
         .el-form-item {
 
@@ -243,15 +251,16 @@ export default {
             }
         }
         .text {
-            width: 100%;
+            width: 6.00rem;
             padding-left: 0.4rem;
             text-align: left;
             color: #ffffff;
             position: absolute;
-            top: -0.04rem;
+            top: -0.02rem;
             a {
                 color: #ea5093;
                 text-decoration: none;
+                letter-spacing: 0;
             }
         }
     }
