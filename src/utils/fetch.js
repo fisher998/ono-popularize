@@ -1,7 +1,13 @@
 import axios from '_axios@0.18.0@axios';
-
+import config from './config';
+const {
+    BASE_DEV,
+    BASE_PRO
+} = config;
+let baseURL = process.env.NODE_ENV === 'development' ? BASE_DEV : BASE_PRO;
+console.log(process.env.NODE_ENV);
 const fetch = axios.create({
-    baseURL: 'http://47.93.241.33:8001/invite',
+    baseURL,
     timeout: 5 * 1000,
     headers: {
         'Accept': 'application/json, text/javascript, *!/!*; q=0.01',

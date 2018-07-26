@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import wx from 'weixin-js-sdk';
 import Header from '../header';
 import Title from '../title';
 import TitleContent from '../titleContent';
@@ -67,7 +69,62 @@ export default {
             this.bgType = 'bg2';
             this.isRegisterSuccess = false;
             window.scrollTo(0, 0)
+        },
+        wxShare () {
+            const getShareToken = {
+            url: 'https://api.ono.chat/api/v1/share/get_token',
+            type: 'post'
+            }
+            axios({
+                method: 'post',
+                url: getShareToken.url,
+                params: {
+                    url: window.location.href
+                }
+            }).then((res, req) => {
+                let data = res.data;
+                console.log(res.data)
+                if(data.status.code === 0) {
+                    wx.config({
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: 'wxadd1f08bb1406b3e', // 必填，公众号的唯一标识
+                        timestamp: data.data.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: data.data.noncestr, // 必填，生成签名的随机串
+                        signature: data.data.signature, // 必填，签名
+                        // jsApiList: [] // 必填，需要使用的JS接口列表
+                        jsApiList: [
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareWeibo',
+                            'onMenuShareQZone'
+                        ]
+                    })
+
+                    wx.ready(() => {
+                        let options = {
+                            title: 'ONO注册领海量ONOT福利',
+                            desc: '邀你共建去中心化社交网络。注册领100 ONOT, 邀请最高再领10000 ONOT。',
+                            link: 'https://www.joinono.com/ono/ono-exchange',
+                            imgUrl: 'https://www.ono.chat/static/public/img/default_share_icon.png',
+                            trigger: function (res) {},
+                            success: function (res) {},
+                            cancel: function (res) {},
+                            fail: function (res) {}
+                        }
+                        wx.onMenuShareTimeline(options) // 分享到朋友圈
+                        wx.onMenuShareAppMessage(options) // 分享给朋友
+                        wx.onMenuShareQQ(options) // 分享给qq
+                        wx.onMenuShareWeibo(options) // 分享给微博
+                        wx.onMenuShareQZone(options) // 分享给空间
+                    })
+                }
+            })
+
         }
+    },
+    created () {
+        this.wxShare();
     }
 }
 </script>

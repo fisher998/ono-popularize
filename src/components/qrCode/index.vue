@@ -3,11 +3,11 @@
         <div class="qr">
             <div class="qr-code-left">
                 <img src="../../images/xuke.jpg" alt="" class="qr-code">
-                <p class="q-text"> 微信关注 ONOXUKE</p>
+                <p class="q-text">微信关注 ONOXUKE</p>
             </div>
             <div class="qr-code-right">
-                <img src="../../images/ono.jpg" alt="" class="qr-code">
-                <p class="q-text"> DAPP下载</p>
+                <img src="../../images/ono.png" alt="" class="qr-code">
+                <p class="q-text">DAPP下载</p>
             </div>
         </div>
     </div>

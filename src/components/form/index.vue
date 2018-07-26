@@ -2,18 +2,18 @@
     <div class="form">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
             <el-form-item prop="mobile" :error="registerErrors.mobile">
-                <el-input type="text" v-model.number="ruleForm.mobile" placeholder="请输入您的手机号"></el-input>
+                <el-input type="text" v-model.number="ruleForm.mobile" placeholder="请输入您的手机号" :maxlength="11"></el-input>
             </el-form-item>
             <div class="yzm-box">
                 <el-form-item prop="vfCode" :error="registerErrors.vfCode">
-                    <el-input class="vfCode" type="number" v-model="ruleForm.vfCode" placeholder="输入验证码"></el-input>
+                    <el-input class="vfCode" type="text" v-model="ruleForm.vfCode" placeholder="输入验证码" :maxlength="4"></el-input>
                 </el-form-item>
                 <div class="btnBox">
                     <button class="vfBtn" :disabled="time !== 0" @click.prevent="sendCode">{{ time === 0 ? '发送验证码' : `重发验证码(${ time < 10 ? '0' + time : time })` }}</button>
                 </div>
             </div>
             <el-form-item prop="ivCode" :error="registerErrors.ivCode">
-                <el-input type="text" v-model="ruleForm.ivCode" placeholder="输入邀请码(选填)"></el-input>
+                <el-input type="text" v-model="ruleForm.ivCode" placeholder="输入邀请码(选填)" maxlength="4"></el-input>
             </el-form-item>
             <div class="protocol-box">
                 <el-form-item prop="protocol">
@@ -141,7 +141,7 @@ export default {
                 if (valid) {
                     this.registerErrors.vfCode = '';
                     this.registerErrors.ivCode = '';
-                    register({ 'code': this.ruleForm.vfCode, 'account': '86' + this.ruleForm.mobile, 'invite': this.ruleForm.ivCode }).then(res => {
+                    register({ 'code': this.ruleForm.vfCode, 'account': '86' + this.ruleForm.mobile, 'invite': this.ruleForm.ivCode || 'AAAAA' }).then(res => {
                         console.log(res)
                         console.log(res.data.status.code)
                         switch (res.data.status.code) {
@@ -200,7 +200,6 @@ export default {
         height: auto;
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
         .el-form-item {
             width: 4.30rem!important;
             .vfCode {
@@ -214,7 +213,7 @@ export default {
             position: relative;
             .vfBtn {
                 position: absolute;
-                bottom: 0rem;
+                bottom: 0.01rem;
                 left: -0.13rem;
                 z-index: 5;
                 width: 2.18rem;
